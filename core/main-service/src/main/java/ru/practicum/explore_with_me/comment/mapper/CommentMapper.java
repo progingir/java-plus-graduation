@@ -7,7 +7,7 @@ import ru.practicum.explore_with_me.comment.model.Comment;
 import ru.practicum.explore_with_me.event.model.Event;
 import ru.practicum.explore_with_me.user.model.User;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface CommentMapper {
     @Mapping(target = "author", source = "user")
     @Mapping(target = "event", source = "event")
@@ -20,6 +20,7 @@ public interface CommentMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "event", source = "event")
     @Mapping(target = "publishedOn", source = "commentRequest.publishedOn")
+    @Mapping(target = "author", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateComment(MergeCommentRequest commentRequest, Event event, @MappingTarget Comment comment);
 }

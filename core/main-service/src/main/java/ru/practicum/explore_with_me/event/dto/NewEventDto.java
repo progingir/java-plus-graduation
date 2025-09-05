@@ -45,8 +45,12 @@ public class NewEventDto {
     String title;
 
     @PositiveOrZero
+    @Builder.Default
     Integer participantLimit = 0;
 
+    @Builder.Default
     Boolean paid = false;
+
+    @Builder.Default
     Boolean requestModeration = true;
 }

@@ -32,6 +32,7 @@ public class EventFullDto {
     Long views;
     Long confirmedRequests;
     String description;
+    @Builder.Default
     Integer participantLimit = 0;
     EventState state;
 
@@ -42,5 +43,6 @@ public class EventFullDto {
     LocalDateTime publishedOn;
 
     LocationDto location;
+    @Builder.Default
     Boolean requestModeration = true;
 }

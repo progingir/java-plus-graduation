@@ -1,6 +1,7 @@
 package ru.practicum.explore_with_me.user.service.impl;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,10 +22,11 @@ import java.util.List;
 @Slf4j
 @Service
 @Transactional
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class UserServiceImpl implements UserService {
-    private final UserMapper userMapper;
-    private final UserRepository userRepository;
+    final UserMapper userMapper;
+    final UserRepository userRepository;
 
     @Override
     public UserResponse createUser(CreateUserRequest createUserRequest) {

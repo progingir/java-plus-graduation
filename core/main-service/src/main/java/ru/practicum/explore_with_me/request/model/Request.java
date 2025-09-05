@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 @ToString
-@Table(name = "requests")
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "requests")
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Request {
     @Id
     @Column(name = "request_id")

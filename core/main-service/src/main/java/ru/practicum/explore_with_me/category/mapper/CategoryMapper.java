@@ -5,7 +5,7 @@ import org.mapstruct.Mapping;
 import ru.practicum.explore_with_me.category.dto.CategoryDto;
 import ru.practicum.explore_with_me.category.model.Category;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface CategoryMapper {
     @Mapping(target = "id", ignore = true)
     Category requestToCategory(CategoryDto categoryDto);
