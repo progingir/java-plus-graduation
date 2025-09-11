@@ -1,4 +1,4 @@
-package ru.practicum.expore_with_me.service;
+package ru.practicum.explore_with_me.service;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
@@ -14,10 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.stats.GetResponse;
 import ru.practicum.dto.stats.HitRequest;
-import ru.practicum.expore_with_me.mapper.HitMapper;
-import ru.practicum.expore_with_me.model.Hit;
-import ru.practicum.expore_with_me.service.StatisticsService;
-import ru.practicum.repository.HitRepository;
+import ru.practicum.explore_with_me.mapper.HitMapper;
+import ru.practicum.explore_with_me.model.Hit;
+import ru.practicum.explore_with_me.repository.HitRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;

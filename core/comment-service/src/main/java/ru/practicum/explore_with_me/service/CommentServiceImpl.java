@@ -17,9 +17,9 @@ import ru.practicum.exception.NotFoundException;
 import ru.practicum.exception.PublicationException;
 import ru.practicum.feign.EventClient;
 import ru.practicum.feign.UserClient;
-import ru.practicum.mapper.CommentMapper;
-import ru.practicum.model.Comment;
-import ru.practicum.repository.CommentRepository;
+import ru.practicum.explore_with_me.mapper.CommentMapper;
+import ru.practicum.explore_with_me.model.Comment;
+import ru.practicum.explore_with_me.repository.CommentRepository;
 
 import java.util.Collection;
 

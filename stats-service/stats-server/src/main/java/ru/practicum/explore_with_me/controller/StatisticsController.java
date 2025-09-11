@@ -1,4 +1,4 @@
-package ru.practicum.expore_with_me.controller;
+package ru.practicum.explore_with_me.controller;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.dto.stats.GetResponse;
 import ru.practicum.dto.stats.HitRequest;
 import ru.practicum.feign.StatsClient;
-import ru.practicum.expore_with_me.service.StatisticsService;
+import ru.practicum.explore_with_me.service.StatisticsService;
 
 import java.time.LocalDateTime;
 import java.util.List;

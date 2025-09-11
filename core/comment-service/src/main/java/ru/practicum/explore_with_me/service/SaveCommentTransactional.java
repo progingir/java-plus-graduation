@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.comment.CommentDto;
-import ru.practicum.mapper.CommentMapper;
-import ru.practicum.model.Comment;
-import ru.practicum.repository.CommentRepository;
+import ru.practicum.explore_with_me.mapper.CommentMapper;
+import ru.practicum.explore_with_me.model.Comment;
+import ru.practicum.explore_with_me.repository.CommentRepository;
 
 @Service
 @RequiredArgsConstructor

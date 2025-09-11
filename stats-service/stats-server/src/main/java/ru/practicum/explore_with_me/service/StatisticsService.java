@@ -1,4 +1,4 @@
-package ru.practicum.expore_with_me.service;
+package ru.practicum.explore_with_me.service;
 
 import ru.practicum.dto.stats.GetResponse;
 import ru.practicum.dto.stats.HitRequest;

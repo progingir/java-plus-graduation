@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.comment.CommentDto;
 import ru.practicum.dto.comment.UpdateCommentDto;
-import ru.practicum.service.CommentService;
+import ru.practicum.explore_with_me.service.CommentService;
 
 import java.util.Collection;
 

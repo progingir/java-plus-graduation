@@ -1,4 +1,4 @@
-package ru.practicum.expore_with_me.model;
+package ru.practicum.explore_with_me.model;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

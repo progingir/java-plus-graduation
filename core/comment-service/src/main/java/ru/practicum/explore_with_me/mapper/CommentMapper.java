@@ -3,7 +3,7 @@ package ru.practicum.explore_with_me.mapper;
 import org.mapstruct.*;
 import ru.practicum.dto.comment.CommentDto;
 import ru.practicum.dto.comment.UpdateCommentDto;
-import ru.practicum.model.Comment;
+import ru.practicum.explore_with_me.model.Comment;
 
 @Mapper(componentModel = "spring")
 public interface CommentMapper {

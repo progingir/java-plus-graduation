@@ -1,4 +1,4 @@
-package ru.practicum.expore_with_me.json_component;
+package ru.practicum.explore_with_me.json_component;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
