@@ -1,12 +1,13 @@
 package ru.practicum.expore_with_me.controller;
 
-import dto.GetResponse;
-import dto.HitRequest;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
-import ru.practicum.client.StatsClient;
+import ru.practicum.dto.stats.GetResponse;
+import ru.practicum.dto.stats.HitRequest;
+import ru.practicum.feign.StatsClient;
 import ru.practicum.expore_with_me.service.StatisticsService;
 
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@FieldDefaults(level = lombok.AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class StatisticsController implements StatsClient {
     final StatisticsService statisticsService;
 

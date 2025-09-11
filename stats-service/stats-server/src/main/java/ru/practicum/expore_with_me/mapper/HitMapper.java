@@ -1,6 +1,6 @@
 package ru.practicum.expore_with_me.mapper;
 
-import dto.HitRequest;
+import ru.practicum.dto.stats.HitRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.practicum.expore_with_me.model.Hit;

@@ -1,6 +1,7 @@
 package ru.practicum.expore_with_me.model;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @Table(name = "hits")
-@FieldDefaults(level = lombok.AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Hit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
