@@ -42,6 +42,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CompilationResponse getCompilationById(Long compId) {
         Compilation compilation = findCompilationById(compId);
         log.info("Compilation with id={} was found", compilation.getId());

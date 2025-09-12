@@ -36,6 +36,7 @@ public class CommentServiceImpl implements CommentService {
     final SaveCommentTransactional saver;
 
     @Override
+    @Transactional
     public CommentDto createComment(UpdateCommentDto updateCommentDto, Long userId) {
         userClient.getUserById(userId);
         EventFullDto event = findEventById(updateCommentDto.getEventId());
@@ -77,6 +78,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public CommentDto updateCommentByIdAndAuthorId(Long commentId, Long userId, UpdateCommentDto updateCommentDto) {
         Comment oldComment;
         if (userId == null) {

@@ -24,7 +24,6 @@ public class Event {
     @JoinColumn(name = "category_id")
     Category category;
 
-    @JoinColumn(name = "initiator_id")
     Long initiatorId;
 
     @ManyToOne(fetch = FetchType.LAZY)

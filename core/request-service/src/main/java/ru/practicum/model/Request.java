@@ -25,10 +25,10 @@ public class Request {
     @Column(name = "created", nullable = false)
     LocalDateTime created;
 
-    @JoinColumn(name = "event_id", nullable = false)
+    @Column(name = "event_id", nullable = false)
     Long eventId;
 
-    @JoinColumn(name = "requester_id", nullable = false)
+    @Column(name = "requester_id", nullable = false)
     Long requesterId;
 
     @Enumerated(EnumType.STRING)
