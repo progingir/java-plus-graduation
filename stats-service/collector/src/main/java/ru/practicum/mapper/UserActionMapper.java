@@ -22,8 +22,8 @@ public class UserActionMapper {
 
     private static ActionTypeAvro toAvroActionType(ActionTypeProto protoType) {
         return switch (protoType) {
-            case ACTION_REGISTER -> ActionTypeAvro.REGISTER;
-            case ACTION_LIKE -> ActionTypeAvro.LIKE;
+            case ACTION_TYPE_REGISTER -> ActionTypeAvro.REGISTER;
+            case ACTION_TYPE_LIKE -> ActionTypeAvro.LIKE;
             default -> ActionTypeAvro.VIEW;
         };
     }

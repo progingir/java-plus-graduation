@@ -18,6 +18,9 @@ public class KafkaProperties {
     @Value("${collector.kafka.topic}")
     private String userActionsTopic;
 
+    @Value("${collector.kafka.schema-registry-url}")
+    private String schemaRegistryUrl;
+
     @Data
     public static class Producer {
         private String keySerializer;

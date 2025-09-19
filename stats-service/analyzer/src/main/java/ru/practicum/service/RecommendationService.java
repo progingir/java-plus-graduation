@@ -2,10 +2,12 @@ package ru.practicum.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.ewm.stats.proto.RecommendationsMessages;
+import ru.practicum.ewm.stats.proto.InteractionsCountRequestProto;
 import ru.practicum.entity.EventSimilarity;
 import ru.practicum.entity.RecommendedEvent;
 import ru.practicum.entity.UserAction;
+import ru.practicum.ewm.stats.proto.SimilarEventsRequestProto;
+import ru.practicum.ewm.stats.proto.UserPredictionsRequestProto;
 import ru.practicum.repository.EventSimilarityRepository;
 import ru.practicum.repository.UserActionRepository;
 
@@ -25,7 +27,7 @@ public class RecommendationService {
     private final UserActionRepository userActionRepo;
     private final EventSimilarityRepository similarityRepo;
 
-    public List<RecommendedEvent> getSimilarEvents(RecommendationsMessages.SimilarEventsRequestProto request) {
+    public List<RecommendedEvent> getSimilarEvents(SimilarEventsRequestProto request) {
         long eventId = request.getEventId();
         long userId  = request.getUserId();
         int maxRes   = request.getMaxResults();
@@ -46,7 +48,7 @@ public class RecommendationService {
         return result.size() <= maxRes ? result : result.subList(0, maxRes);
     }
 
-    public List<RecommendedEvent> getRecommendationsForUser(RecommendationsMessages.UserPredictionsRequestProto request) {
+    public List<RecommendedEvent> getRecommendationsForUser(UserPredictionsRequestProto request) {
         long userId = request.getUserId();
         int maxRes  = request.getMaxResults();
 
@@ -85,7 +87,7 @@ public class RecommendationService {
                 .collect(Collectors.toList());
     }
 
-    public List<RecommendedEvent> getInteractionsCount(RecommendationsMessages.InteractionsCountRequestProto request) {
+    public List<RecommendedEvent> getInteractionsCount(InteractionsCountRequestProto request) {
         List<Long> events = request.getEventIdList();
         List<RecommendedEvent> result = new ArrayList<>();
 
