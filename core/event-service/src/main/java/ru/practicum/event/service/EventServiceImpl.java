@@ -4,7 +4,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ValidationException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +20,10 @@ import ru.practicum.dto.event.enums.EventState;
 import ru.practicum.dto.event.enums.EventStateAction;
 import ru.practicum.dto.event.enums.SortType;
 import ru.practicum.dto.request.RequestDto;
-import ru.practicum.dto.stats.GetResponse;
-import ru.practicum.dto.stats.HitRequest;
+import ru.practicum.dto.request.enums.RequestStatus;
 import ru.practicum.dto.user.UserDto;
 import ru.practicum.dto.user.UserShortDto;
+import ru.practicum.event.dto.EventRecommendationDto;
 import ru.practicum.event.mapper.EventMapper;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.Location;
@@ -33,7 +32,6 @@ import ru.practicum.event.repository.LocationRepository;
 import ru.practicum.event.specification.EventFindSpecification;
 import ru.practicum.exception.*;
 import ru.practicum.feign.RequestClient;
-import ru.practicum.feign.StatsClient;
 import ru.practicum.feign.UserClient;
 
 import java.time.LocalDateTime;
@@ -53,7 +51,6 @@ public class EventServiceImpl implements EventService {
     final LocationRepository locationRepository;
     final UserClient userClient;
     final EntityManager entityManager;
-    final StatsClient statsClient;
 
     @Override
     public Collection<EventShortDto> getAllEvents(Long userId, Integer from, Integer size) {
@@ -61,8 +58,6 @@ public class EventServiceImpl implements EventService {
         Pageable pageable = PageRequest.of(pageNumber, size);
 
         Page<Event> page = eventRepository.findAllByInitiatorId(userId, pageable);
-
-        addViewsInEventsPage(page);
 
         log.info("Get events with {userId, from, size} = ({}, {}, {})", userId, from, size);
         return page.getContent().stream().map(eventMapper::toShortDto).toList();
@@ -93,8 +88,6 @@ public class EventServiceImpl implements EventService {
                 .and(EventFindSpecification.eventDateAfter(rangeStart))
                 .and(EventFindSpecification.eventDateBefore(rangeEnd));
         Page<Event> page = eventRepository.findAll(specification, pageable);
-
-        addViewsInEventsPage(page);
 
         log.info("Get events with {users, states, categories, rangeStart, rangeEnd, from, size} = ({},{},{},{},{},{},{})",
                 users, size, categories, rangeStart, rangeEnd, from, size);
@@ -130,7 +123,6 @@ public class EventServiceImpl implements EventService {
         SortType sort = params.getSort();
         Integer from = params.getFrom();
         Integer size = params.getSize();
-        HttpServletRequest httpServletRequest = params.getHttpServletRequest();
 
         Pageable pageable = PageRequest.of(from / size, size);
 
@@ -142,11 +134,6 @@ public class EventServiceImpl implements EventService {
             throw new ValidationException("Time period incorrect");
         }
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Event> criteriaQuery = criteriaBuilder.createQuery(Event.class);
-        Root<Event> root = criteriaQuery.from(Event.class);
-        criteriaQuery.select(root);
-
         Specification<Event> specification = Specification
                 .where(EventFindSpecification.textInAnnotationOrDescription(text))
                 .and(EventFindSpecification.categoryIn(categories))
@@ -156,9 +143,6 @@ public class EventServiceImpl implements EventService {
                 .and(EventFindSpecification.sortBySortType(sort))
                 .and(EventFindSpecification.onlyPublished());
         Page<Event> page = eventRepository.findAll(specification, pageable);
-
-        saveViewInStatistic("/events", httpServletRequest.getRemoteAddr());
-        addViewsInEventsPage(page);
 
         log.info("Get events with {text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size} = ({},{},{},{},{},{},{},{},{})",
                 text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
@@ -221,22 +205,16 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto getEventById(Long userId, Long eventId) {
         Event event = findEventByIdAndInitiatorId(userId, eventId);
-        if (event.getPublishedOn() != null) {
-            addViewsInEvent(event);
-        }
         return eventMapper.toFullDto(event);
     }
 
     @Override
-    public EventFullDto getEventByIdPublic(Long eventId, HttpServletRequest httpServletRequest) {
+    public EventFullDto getEventByIdPublic(Long eventId, Long userId) {
         Event event = findEventById(eventId);
 
         if (event.getState() != EventState.PUBLISHED) {
             throw new GetPublicEventException("Event must be published");
         }
-
-        saveViewInStatistic("/events/" + eventId, httpServletRequest.getRemoteAddr());
-        addViewsInEvent(event);
         return eventMapper.toFullDto(event);
     }
 
@@ -245,13 +223,8 @@ public class EventServiceImpl implements EventService {
     public EventFullDto updateEvent(Long userId, Long eventId, UpdateEventUserRequest updateRequest) {
         Event event = findEventByIdAndInitiatorId(userId, eventId);
 
-        if (event.getPublishedOn() != null) {
-            addViewsInEvent(event);
-        }
-
-
         if (event.getState().equals(EventState.PUBLISHED)) {
-            throw new AlreadyPublishedException("Event with eventId = " + eventId + "has already been published");
+            throw new AlreadyPublishedException("Event with eventId = " + eventId + " has already been published");
         }
 
         stateChanger(event, updateRequest.getStateAction());
@@ -280,6 +253,26 @@ public class EventServiceImpl implements EventService {
         return getEventById(userId, eventId);
     }
 
+    @Override
+    public void addLike(long userId, long eventId) {
+        Event event = findEventById(eventId);
+
+        // Сокращенная версия, которая сразу получает список
+        boolean isUserConfirmed = requestClient.getConfirmedRequests(List.of(eventId))
+                .getOrDefault(eventId, Collections.emptyList())
+                .stream()
+                .anyMatch(request -> request.getRequester().equals(userId) && request.getStatus().equals(RequestStatus.CONFIRMED));
+
+        if (!isUserConfirmed) {
+            throw new IncorrectValueException("User has not attended the event and cannot like it.");
+        }
+    }
+
+    @Override
+    public List<EventRecommendationDto> getRecommendationsForUser(long userId, int maxResults) {
+        return Collections.emptyList();
+    }
+
     private void stateChanger(Event event, EventStateAction stateAction) {
         if (stateAction != null) {
             Map<EventStateAction, EventState> state = Map.of(
@@ -288,70 +281,6 @@ public class EventServiceImpl implements EventService {
                     EventStateAction.PUBLISH_EVENT, EventState.PUBLISHED,
                     EventStateAction.REJECT_EVENT, EventState.CANCELED);
             event.setState(state.get(stateAction));
-        }
-    }
-
-    private void saveViewInStatistic(String uri, String ip) {
-        HitRequest hitRequest = HitRequest.builder()
-                .app("ewm-main-service")
-                .uri(uri)
-                .ip(ip)
-                .build();
-        statsClient.addHit(hitRequest);
-    }
-
-    private List<GetResponse> loadViewFromStatistic(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
-        return statsClient.getStatistics(start, end, uris, unique);
-    }
-
-    private void addViewsInEventsPage(Page<Event> page) {
-        if (page == null || page.isEmpty()) {
-            return;
-        }
-        LocalDateTime earlyPublishedDate = null;
-        List<String> uris = new ArrayList<>();
-        for (Event event : page) {
-            if (event.getPublishedOn() != null) {
-                uris.add("/events/" + event.getId());
-                if (earlyPublishedDate == null || event.getPublishedOn().isBefore(earlyPublishedDate)) {
-                    earlyPublishedDate = event.getPublishedOn();
-                }
-            }
-        }
-
-        if (earlyPublishedDate == null) {
-            return;
-        }
-
-        List<GetResponse> response = loadViewFromStatistic(earlyPublishedDate, LocalDateTime.now(), uris, true);
-
-        if (response == null || response.isEmpty()) {
-            return;
-        }
-
-        Map<Long, Long> hitsById = response.stream()
-                .collect(
-                        Collectors.toMap(
-                                getResponse -> Long.parseLong(getResponse.getUri().substring(getResponse.getUri().lastIndexOf("/") + 1)),
-                                GetResponse::getHits
-                        )
-                );
-
-        for (Event event : page) {
-            event.setViews(hitsById.getOrDefault(event.getId(), 0L));
-        }
-    }
-
-    private void addViewsInEvent(Event event) {
-        List<GetResponse> getResponses = loadViewFromStatistic(
-                event.getPublishedOn(),
-                LocalDateTime.now(),
-                List.of("/events/" + event.getId()),
-                true);
-
-        if (!getResponses.isEmpty()) {
-            GetResponse getResponse = getResponses.getFirst();
-            event.setViews(getResponse.getHits());
         }
     }
 

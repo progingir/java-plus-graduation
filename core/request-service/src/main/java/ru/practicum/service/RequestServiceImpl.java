@@ -74,6 +74,7 @@ public class RequestServiceImpl implements RequestService {
                 .status(status)
                 .build();
         log.info("Post request body = {}", request);
+
         return saver.save(request);
     }
 
@@ -83,7 +84,7 @@ public class RequestServiceImpl implements RequestService {
         Request request = requestRepository.findById(requestId).orElseThrow(() ->
                 new NotFoundException("Request not found"));
         request.setStatus(RequestStatus.CANCELED);
-        log.info("Cancel request by requestId = {} and userId = {}",requestId,userId);
+        log.info("Cancel request by requestId = {} and userId = {}", requestId, userId);
         return saver.save(request);
     }
 
