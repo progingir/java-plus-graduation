@@ -11,7 +11,7 @@ services:
       - POSTGRES_USER=sdb
       - POSTGRES_PASSWORD=password
     healthcheck:
-      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      test: ["CMD-SHELL", "pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER"]
       timeout: 5s
       interval: 5s
       retries: 10
@@ -28,7 +28,22 @@ services:
     volumes:
       - ./volumes/postgres/ewm_data:/var/lib/postgresql/data/
     healthcheck:
-      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      test: ["CMD-SHELL", "pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER"]
       timeout: 5s
       interval: 5s
       retries: 10
+
+  config-server:
+    image: ваш-образ-config-server:latest
+    container_name: config-server
+    ports:
+      - "9091:9091"
+
+  collector:
+    image: ваш-образ-коллектора:latest
+    container_name: collector
+    ports:
+      - "8080:8080"
+    depends_on:
+      config-server:
+        condition: service_started
