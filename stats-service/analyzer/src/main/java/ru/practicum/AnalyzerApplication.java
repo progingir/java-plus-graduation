@@ -1,13 +1,16 @@
-package ru.practicum.explore_with_me;
+package ru.practicum;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@EnableFeignClients
 @SpringBootApplication
-public class StatsServer {
+@EnableDiscoveryClient
+@EnableFeignClients
+public class AnalyzerApplication {
     public static void main(String[] args) {
-        SpringApplication.run(StatsServer.class, args);
+        SpringApplication.run(AnalyzerApplication.class, args);
     }
+
 }

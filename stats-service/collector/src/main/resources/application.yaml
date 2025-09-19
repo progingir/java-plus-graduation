@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: collector
+  config:
+    import: optional:configserver:http://config-server:9091
+  cloud:
+    config:
+      fail-fast: true
+      retry:
+        useRandomPolicy: true
+        max-interval: 6000
+      discovery:
+        enabled: true
+        service-id: config-server
+kafka:
+  bootstrap-servers: kafka:9092
+  schema-registry-url: http://schema-registry:8081
+  producer:
+    topic: user.actions
+    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname:localhost}:${eureka.instance.port:8761}/eureka/
+  instance:
+    prefer-ip-address: true
+    hostname: localhost
+    instance-id: "${spring.application.name}:${random.value}"
+    lease-renewal-interval-in-seconds: 10
+server:
+  port: 0
