@@ -26,3 +26,7 @@ eureka:
     lease-renewal-interval-in-seconds: 10
 server:
   port: 0
+
+kafka:
+  events-similarity-consumer:
+    topic: events-similarity
