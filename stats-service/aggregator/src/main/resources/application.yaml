@@ -1,6 +1,9 @@
 spring:
   application:
     name: aggregator
+  kafka:
+    user-actions-consumer:
+      topic: user-actions
   config:
     import: "configserver:"
   cloud:
