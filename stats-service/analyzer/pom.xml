@@ -13,7 +13,6 @@
     <artifactId>analyzer</artifactId>
 
     <repositories>
-        <!-- Репозиторий Maven Central для загрузки зависимостей -->
         <repository>
             <id>central</id>
             <url>https://repo.maven.apache.org/maven2</url>
@@ -21,19 +20,16 @@
     </repositories>
 
     <dependencies>
-        <!-- Зависимость от модуля proto-schemas для доступа к сгенерированным классам Protobuf -->
         <dependency>
             <groupId>ru.practicum</groupId>
             <artifactId>proto-schemas</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-        <!-- Spring Boot Starter для gRPC -->
         <dependency>
             <groupId>net.devh</groupId>
             <artifactId>grpc-server-spring-boot-starter</artifactId>
             <version>3.1.0.RELEASE</version>
         </dependency>
-        <!-- gRPC зависимости -->
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-protobuf</artifactId>
@@ -44,19 +40,16 @@
             <artifactId>grpc-stub</artifactId>
             <version>1.66.0</version>
         </dependency>
-        <!-- Protobuf зависимость -->
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
             <version>3.25.5</version>
         </dependency>
-        <!-- Spring Boot Starter -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
             <version>3.3.3</version>
         </dependency>
-        <!-- Lombok для аннотации @RequiredArgsConstructor -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -68,6 +61,12 @@
             <artifactId>avro-schemas</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.avro</groupId>
+                    <artifactId>avro-tools</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>
@@ -93,7 +92,6 @@
 
     <build>
         <plugins>
-            <!-- Плагин для Lombok -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
