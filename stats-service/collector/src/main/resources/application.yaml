@@ -19,6 +19,9 @@ kafka:
     topic: stats-server.user-actions.v1
     key-serializer: org.apache.kafka.common.serialization.StringSerializer
     value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+collector:
+  kafka:
+    topic: stats-server.user-actions.v1
 eureka:
   client:
     register-with-eureka: true
