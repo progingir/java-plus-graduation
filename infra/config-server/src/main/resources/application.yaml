@@ -13,7 +13,7 @@ spring:
             - classpath:config/stats-service/{application}
 
 server:
-  port: 0
+  port: 9091
 
 eureka:
   instance:
