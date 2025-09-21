@@ -30,3 +30,9 @@ server:
 kafka:
   events-similarity-consumer:
     topic: events-similarity
+    keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
+    valueDeserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+    user-actions-consumer:
+      topic: user-actions
+      keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
+      valueDeserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
