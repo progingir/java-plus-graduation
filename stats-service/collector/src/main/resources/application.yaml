@@ -12,16 +12,15 @@ spring:
       discovery:
         enabled: true
         service-id: config-server
-kafka:
-  bootstrap-servers: kafka:9092
-  schema-registry-url: http://schema-registry:8081
-  producer:
-    topic: stats-server.user-actions.v1
-    key-serializer: org.apache.kafka.common.serialization.StringSerializer
-    value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+  kafka:
+    bootstrap-servers: kafka:29092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
 collector:
   kafka:
     topic: stats-server.user-actions.v1
+    schema-registry-url: http://schema-registry:8081
 eureka:
   client:
     register-with-eureka: true
@@ -31,7 +30,7 @@ eureka:
   instance:
     prefer-ip-address: true
     hostname: localhost
-    instance-id: "${spring.application.name}:${random.value}"
+    instance-id:
     lease-renewal-interval-in-seconds: 10
 server:
   port: 0
