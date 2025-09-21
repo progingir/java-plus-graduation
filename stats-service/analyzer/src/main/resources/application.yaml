@@ -2,7 +2,7 @@ spring:
   application:
     name: analyzer
   config:
-    import: "configserver:"
+    import: optional:configserver:http://config-server:9091
   cloud:
     config:
       fail-fast: true
@@ -12,25 +12,13 @@ spring:
       discovery:
         enabled: true
         service-id: config-server
-kafka:
-  bootstrap-servers: kafka:29092
-  schema-registry-url: http://schema-registry:8081
-  user-actions-consumer:
-    group-id: analyzer-group
-    topic: stats-server.user-actions.v1
-    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
-  events-similarity-consumer:
-    group-id: similarity-group
-    topic: stats-server.events-similarity.v1
-    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     serviceUrl:
-      defaultZone: http://eureka:8761/eureka/
+      defaultZone: http://${eureka.instance.hostname:localhost}:${eureka.instance.port:8761}/eureka/
   instance:
     prefer-ip-address: true
     hostname: localhost
