@@ -192,10 +192,10 @@ services:
     networks:
       - ewm-net
     command: "bash -c \
-                'kafka-topics --create --topic stats.user-actions.v1 \
+                'kafka-topics --create --topic stats-server.user-actions.v1 \
                              --partitions 1 --replication-factor 1 --if-not-exists \
                              --bootstrap-server kafka:29092 && \
-                kafka-topics --create --topic stats.events-similarity.v1 \
+                kafka-topics --create --topic stats-server.events-similarity.v1 \
                              --partitions 1 --replication-factor 1 --if-not-exists \
                              --bootstrap-server kafka:29092'"
     init: true
@@ -209,6 +209,7 @@ services:
     networks:
       - ewm-net
     environment:
+      - SPRING_CONFIG_IMPORT=configserver:http://config-server:9091
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
       - SERVER_PORT=8085
     healthcheck:
