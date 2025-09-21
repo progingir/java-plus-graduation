@@ -27,20 +27,20 @@ spring:
     init:
       mode: always
 kafka:
-  bootstrap-servers: kafka:9092
+  bootstrap-servers: kafka:29092
   schema-registry-url: http://schema-registry:8081
   user-actions-consumer:
     group-id: aggregator-group
-    topic: user.actions
+    topic: stats-server.user-actions.v1
     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
   events-similarity-consumer:
     group-id: similarity-group
-    topic: event.similarities
+    topic: stats-server.events-similarity.v1
     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
   producer:
-    topic: event.similarities
+    topic: stats-server.events-similarity.v1
     key-serializer: org.apache.kafka.common.serialization.StringSerializer
     value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
 eureka:
@@ -50,10 +50,10 @@ eureka:
     serviceUrl:
       defaultZone: http://eureka:8761/eureka/
   instance:
-    preferIpAddress: true
+    prefer-ip-address: true
     hostname: localhost
     instance-id: "${spring.application.name}:${random.value}"
-    leaseRenewalIntervalInSeconds: 10
+    lease-renewal-interval-in-seconds: 10
 server:
   port: 0
 logging:
