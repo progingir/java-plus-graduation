@@ -15,8 +15,8 @@ spring:
   datasource:
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://recommendation-db:5432/recommendation-db
-    username: rdb
-    password: password
+    username: root
+    password: root
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -55,7 +55,7 @@ eureka:
     instance-id: "${spring.application.name}:${random.value}"
     lease-renewal-interval-in-seconds: 10
 server:
-  port: 0
+  port: 8086
 logging:
   level:
     org.springframework.web: INFO
