@@ -229,6 +229,10 @@ services:
     networks:
       - ewm-net
     environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://recommendation-db:5432/recommendation-db
+      - SPRING_DATASOURCE_USERNAME=rdb
+      - SPRING_DATASOURCE_PASSWORD=password
+
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
       - SERVER_PORT=8086
     healthcheck:
