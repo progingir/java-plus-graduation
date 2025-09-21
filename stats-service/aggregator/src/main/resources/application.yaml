@@ -19,13 +19,14 @@ spring:
     password: root
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none  # Изменить с create-drop на none, чтобы не выполнять DDL на старте (не пытаться создавать/удалять таблицы)
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect  # Добавить явный диалект, чтобы не требовалось подключение для автоопределения
         format_sql: true
   sql:
     init:
-      mode: always
+      mode: never  # Изменить с always на never, чтобы не запускать init-скрипты (data.sql/schema.sql) на старте
 kafka:
   bootstrap-servers: kafka:29092
   schema-registry-url: http://schema-registry:8081
