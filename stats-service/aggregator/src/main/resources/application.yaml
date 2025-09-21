@@ -15,8 +15,7 @@ spring:
 kafka:
   user-actions-consumer:
     topic: user-actions
-  consumer:
-    group-id: aggregator-group
+group-id: aggregator-group
 eureka:
   client:
     register-with-eureka: true

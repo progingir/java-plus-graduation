@@ -20,6 +20,9 @@ public class KafkaConsumerConfig {
         ConcurrentKafkaListenerContainerFactory<String, UserActionAvro> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);
+
+        factory.getContainerProperties().setGroupId("aggregator-group");
+
         return factory;
     }
 }
