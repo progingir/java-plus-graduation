@@ -2,7 +2,7 @@ spring:
   application:
     name: collector
   config:
-    import: optional:configserver:http://config-server:9091
+    import: "configserver:"
   cloud:
     config:
       fail-fast: true

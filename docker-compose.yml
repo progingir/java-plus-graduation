@@ -201,7 +201,7 @@ services:
     init: true
 
   collector:
-    build: stats/collector
+    build: stats-service/collector
     container_name: ewm-collector
     depends_on:
       config-server:
@@ -218,7 +218,7 @@ services:
       retries: 10
 
   aggregator:
-    build: stats/aggregator
+    build: stats-service/aggregator
     container_name: ewm-aggregator
     depends_on:
       config-server:
@@ -235,7 +235,7 @@ services:
       retries: 10
 
   analyzer:
-    build: stats/analyzer
+    build: stats-service/analyzer
     container_name: ewm-analyzer
     depends_on:
       analyzer-db:
