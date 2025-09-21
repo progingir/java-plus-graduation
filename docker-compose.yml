@@ -15,6 +15,8 @@ services:
   config-server:
     build: infra/config-server
     container_name: config-server
+    ports:
+      - "9091:9091"
     depends_on:
       discovery-server:
         condition: service_healthy
@@ -221,15 +223,9 @@ services:
     depends_on:
       config-server:
         condition: service_healthy
-      recommendation-db:
-        condition: service_healthy
     networks:
       - ewm-net
     environment:
-      - SPRING_CONFIG_IMPORT=configserver:http://config-server:9091 # <--- Добавьте эту строку
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://recommendation-db:5432/recommendation-db
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
       - SERVER_PORT=8086
     healthcheck:
@@ -237,21 +233,6 @@ services:
       timeout: 5s
       interval: 15s
       retries: 10
-
-  recommendation-db:
-    image: postgres:16.1
-    container_name: recommendation-db
-    environment:
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_USER=root
-      - POSTGRES_DB=recommendation-db
-    networks:
-      - ewm-net
-    healthcheck:
-      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
-      timeout: 5s
-      interval: 10s
-      retries: 15
 
   analyzer:
     build: stats-service/analyzer

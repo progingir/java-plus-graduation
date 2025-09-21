@@ -12,52 +12,17 @@ spring:
       discovery:
         enabled: true
         service-id: config-server
-  datasource:
-    driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://recommendation-db:5432/recommendation-db
-    username: root
-    password: root
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    properties:
-      hibernate:
-        format_sql: true
-  sql:
-    init:
-      mode: always
-kafka:
-  bootstrap-servers: kafka:29092
-  schema-registry-url: http://schema-registry:8081
-  user-actions-consumer:
-    group-id: aggregator-group
-    topic: stats-server.user-actions.v1
-    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
-  events-similarity-consumer:
-    group-id: similarity-group
-    topic: stats-server.events-similarity.v1
-    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
-  producer:
-    topic: stats-server.events-similarity.v1
-    key-serializer: org.apache.kafka.common.serialization.StringSerializer
-    value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     serviceUrl:
-      defaultZone: http://eureka:8761/eureka/
+      defaultZone: http://${eureka.instance.hostname:localhost}:${eureka.instance.port:8761}/eureka/
   instance:
-    prefer-ip-address: true
+    preferIpAddress: true
     hostname: localhost
     instance-id: "${spring.application.name}:${random.value}"
-    lease-renewal-interval-in-seconds: 10
+    leaseRenewalIntervalInSeconds: 10
 server:
-  port: 8086
-logging:
-  level:
-    org.springframework.web: INFO
-    org.springframework.orm.jpa: INFO
-    org.zalando.logbook: TRACE
+  port: 0
