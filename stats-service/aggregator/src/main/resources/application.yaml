@@ -1,9 +1,6 @@
 spring:
   application:
     name: aggregator
-  kafka:
-    user-actions-consumer:
-      topic: user-actions
   config:
     import: "configserver:"
   cloud:
@@ -15,7 +12,9 @@ spring:
       discovery:
         enabled: true
         service-id: config-server
-
+kafka:
+  user-actions-consumer:
+    topic: user-actions
 eureka:
   client:
     register-with-eureka: true
