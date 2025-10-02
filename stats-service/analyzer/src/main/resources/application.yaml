@@ -28,8 +28,8 @@ server:
   port: 0
 
 kafka:
-  bootstrap-servers: kafka:29092
-  schema-registry-url: http://schema-registry:8081
+  bootstrap-servers: localhost:9092
+  schema-registry-url: http://localhost:8081
   user-actions-consumer:
     topic: user-actions
     group-id: user-actions-group
