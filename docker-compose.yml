@@ -255,6 +255,9 @@ services:
   analyzer:
     build: stats-service/analyzer
     container_name: ewm-analyzer
+    ports:
+      - "8087:8087"
+      - "9097:9097"
     depends_on:
       analyzer-db:
         condition: service_healthy
@@ -272,6 +275,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=root
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
       - SERVER_PORT=8087
+      - GRPC_SERVER_PORT=9097
     healthcheck:
       test: [ "CMD", "kafka-topics", "--bootstrap-server", "localhost:29092", "--list" ]
       interval: 10s
