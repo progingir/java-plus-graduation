@@ -1,53 +1,50 @@
-server:
-  port: 8087 # Порт, указанный в docker-compose.yml для сервиса analyzer
-
 spring:
   application:
-    name: ewm-analyzer # Имя сервиса для регистрации в Eureka, соответствует container_name
+    name: analyzer
+  config:
+    import: optional:configserver:http://config-server:9091
+  cloud:
+    config:
+      fail-fast: true
+      retry:
+        useRandomPolicy: true
+        max-interval: 6000
+      discovery:
+        enabled: true
+        service-id: config-server
 
-  # --- НАСТРОЙКИ БАЗЫ ДАННЫХ ---
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://analyzer-db:5432/ewm-analyzer # URL из docker-compose.yml
-    username: root
-    password: root
 
-  # --- НАСТРОЙКИ JPA/HIBERNATE ---
-  jpa:
-    hibernate:
-      ddl-auto: validate # Рекомендуется 'validate' или 'none' для запуска, чтобы не пересоздавать таблицы
-    show-sql: true # Полезно для отладки, чтобы видеть SQL-запросы в логах
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+  grpc:
+    server:
+      port: 0
 
-# --- НАСТРОЙКИ КЛИЕНТА EUREKA DISCOVERY ---
 eureka:
   client:
-    service-url:
-      defaultZone: http://discovery-server:8761/eureka/ # Адрес сервера Eureka из docker-compose.yml
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname:localhost}:${eureka.instance.port:8761}/eureka/
+  instance:
+    prefer-ip-address: true
+    hostname: localhost
+    instance-id: "${spring.application.name}:${random.value}"
+    lease-renewal-interval-in-seconds: 10
 
-# --- НАСТРОЙКИ KAFKA И SCHEMA REGISTRY ---
+server:
+  port: 0
+
+
+
 kafka:
-  bootstrap-servers: kafka:29092 # Адрес Kafka для внутреннего общения в Docker-сети
-  schema-registry-url: http://schema-registry:8081 # Адрес Schema Registry
-
-  # --- НАСТРОЙКИ КОНСЬЮМЕРА ДЛЯ "USER ACTIONS" ---
+  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+  schema-registry-url: ${KAFKA_SCHEMA_REGISTRY_URL:http://schema-registry:8081}
   user-actions-consumer:
-    topic: stats-server.user-actions.v1 # Имя топика из kafka-init-topics
-    group-id: user-actions-group # Уникальный ID группы консьюмеров
+    topic: user-actions
+    group-id: user-actions-group
     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer # Десериализатор для Avro
-
-  # --- НАСТРОЙКИ КОНСЬЮМЕРА ДЛЯ "EVENTS SIMILARITY" ---
+    value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
   events-similarity-consumer:
-    topic: stats-server.events-similarity.v1 # Имя топика из kafka-init-topics
-    group-id: events-similarity-group # Уникальный ID группы консьюмеров
+    topic: events-similarity
+    group-id: events-similarity-group
     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer # Десериализатор для Avro
-
-# --- НАСТРОЙКИ ЛОГИРОВАНИЯ ---
-logging:
-  level:
-    root: INFO
-    ru.practicum: DEBUG # Более детальное логирование для ваших пакетов
+    value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
