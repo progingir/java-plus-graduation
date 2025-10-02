@@ -261,8 +261,8 @@ services:
       config-server:
         condition: service_healthy
       kafka:
-        condition: service_started
-      schema-registry: # <--- ДОБАВЛЕНА ЗАВИСИМОСТЬ ОТ SCHEMA REGISTRY
+        condition: service_healthy
+      schema-registry:
         condition: service_started
     networks:
       - ewm-net
@@ -273,10 +273,11 @@ services:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
       - SERVER_PORT=8087
     healthcheck:
-      test: "curl --fail --silent localhost:8087/actuator/health | grep UP || exit 1"
+      test: [ "CMD", "kafka-topics", "--bootstrap-server", "localhost:29092", "--list" ]
+      interval: 10s
       timeout: 5s
-      interval: 15s
-      retries: 10
+      retries: 5
+      start_period: 20s
 
   analyzer-db:
     image: postgres:16.1
