@@ -1,6 +1,10 @@
 server:
   port: 0 # Порт, указанный в docker-compose.yml для сервиса analyzer
 
+grpc:
+  server:
+    port: 9097
+
 spring:
   application:
     name: analyzer # Имя сервиса для регистрации в Eureka, соответствует container_name
@@ -25,7 +29,7 @@ spring:
 eureka:
   instance:
     metadata-map:
-      gRPC_port: ${grpc.server.port}
+      grpcPort: ${grpc.server.port}
   client:
     service-url:
       defaultZone: http://discovery-server:8761/eureka/ # Адрес сервера Eureka из docker-compose.yml
