@@ -253,17 +253,13 @@ services:
       retries: 10
 
   analyzer:
-    build: stats-service/analyzer
+    build: stats/analyzer
     container_name: ewm-analyzer
     depends_on:
       analyzer-db:
         condition: service_healthy
       config-server:
         condition: service_healthy
-      kafka:
-        condition: service_healthy
-      schema-registry:
-        condition: service_started
     networks:
       - ewm-net
     environment:
@@ -273,11 +269,10 @@ services:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
       - SERVER_PORT=8087
     healthcheck:
-      test: [ "CMD", "kafka-topics", "--bootstrap-server", "localhost:29092", "--list" ]
-      interval: 10s
+      test: "curl --fail --silent localhost:8087/actuator/health | grep UP || exit 1"
       timeout: 5s
-      retries: 5
-      start_period: 20s
+      interval: 15s
+      retries: 10
 
   analyzer-db:
     image: postgres:16.1
