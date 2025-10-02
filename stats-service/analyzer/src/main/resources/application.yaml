@@ -22,7 +22,7 @@ eureka:
   instance:
     prefer-ip-address: true
     metadata-map:
-      grpc.port: ${grpc.server.port}
+      gRPC_port: ${grpc.server.port}
     hostname: localhost
     instance-id: "${spring.application.name}:${random.value}"
     lease-renewal-interval-in-seconds: 10
