@@ -27,6 +27,10 @@ eureka:
 server:
   port: 0
 
+grpc:
+  server:
+    port: 0
+
 kafka:
   bootstrap-servers: localhost:9092
   schema-registry-url: http://localhost:8081
