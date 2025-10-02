@@ -7,6 +7,6 @@ import org.springframework.context.annotation.Configuration;
 public class GrpcServerConfig {
 
     public GrpcServerConfig(GrpcServerProperties grpcServerProperties) {
-        grpcServerProperties.setPort(9097); // Устанавливаем порт явно
+        grpcServerProperties.setPort(9097);
     }
 }

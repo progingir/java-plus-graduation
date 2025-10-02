@@ -1,10 +1,6 @@
 server:
   port: 0 # Порт, указанный в docker-compose.yml для сервиса analyzer
 
-grpc:
-  server:
-    port: 9097
-
 spring:
   application:
     name: analyzer # Имя сервиса для регистрации в Eureka, соответствует container_name
