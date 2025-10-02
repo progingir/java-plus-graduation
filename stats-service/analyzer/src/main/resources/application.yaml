@@ -27,6 +27,9 @@ spring:
 
 # --- НАСТРОЙКИ КЛИЕНТА EUREKA DISCOVERY ---
 eureka:
+  instance:
+    metadata-map:
+      gRPC_port: ${grpc.server.port}
   client:
     service-url:
       defaultZone: http://discovery-server:8761/eureka/ # Адрес сервера Eureka из docker-compose.yml
