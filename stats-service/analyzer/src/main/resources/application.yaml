@@ -45,9 +45,3 @@ kafka:
     group-id: events-similarity-group # Уникальный ID группы консьюмеров
     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer # Десериализатор для Avro
-
-# --- НАСТРОЙКИ ЛОГИРОВАНИЯ ---
-logging:
-  level:
-    root: INFO
-    ru.practicum: DEBUG # Более детальное логирование для ваших пакетов
