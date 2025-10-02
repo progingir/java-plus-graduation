@@ -13,7 +13,6 @@ spring:
         enabled: true
         service-id: config-server
 
-
 eureka:
   client:
     register-with-eureka: true
@@ -25,6 +24,7 @@ eureka:
     hostname: localhost
     instance-id: "${spring.application.name}:${random.value}"
     lease-renewal-interval-in-seconds: 10
+
 server:
   port: 0
 
@@ -45,3 +45,7 @@ kafka:
     group-id: events-similarity-group
     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+
+logging:
+  level:
+    net.devh.boot.grpc.server: DEBUG
