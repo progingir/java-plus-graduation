@@ -1,13 +1,13 @@
 server:
-  port: 8087 # Порт, указанный в docker-compose.yml для сервиса analyzer
+  port: 0 # Порт, указанный в docker-compose.yml для сервиса analyzer
 
 grpc:
   server:
-    port: 9091
+    port: 9097
 
 spring:
   application:
-    name: ewm-analyzer # Имя сервиса для регистрации в Eureka, соответствует container_name
+    name: analyzer # Имя сервиса для регистрации в Eureka, соответствует container_name
 
   # --- НАСТРОЙКИ БАЗЫ ДАННЫХ ---
   datasource:
@@ -52,3 +52,5 @@ kafka:
     group-id: events-similarity-group # Уникальный ID группы консьюмеров
     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer # Десериализатор для Avro
+
+
