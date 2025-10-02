@@ -13,6 +13,11 @@ spring:
         enabled: true
         service-id: config-server
 
+
+  grpc:
+    server:
+      port: 0
+
 eureka:
   client:
     register-with-eureka: true
@@ -29,20 +34,17 @@ server:
   port: 0
 
 
-#kafka:
-#  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
-#  schema-registry-url: ${KAFKA_SCHEMA_REGISTRY_URL:http://schema-registry:8081}
-#  user-actions-consumer:
-#    topic: user-actions
-#    group-id: user-actions-group
-#    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#    value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
-#  events-similarity-consumer:
-#    topic: events-similarity
-#    group-id: events-similarity-group
-#    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#    value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
-#
-#logging:
-#  level:
-#    net.devh.boot.grpc.server: DEBUG
+
+kafka:
+  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+  schema-registry-url: ${KAFKA_SCHEMA_REGISTRY_URL:http://schema-registry:8081}
+  user-actions-consumer:
+    topic: user-actions
+    group-id: user-actions-group
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+  events-similarity-consumer:
+    topic: events-similarity
+    group-id: events-similarity-group
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
