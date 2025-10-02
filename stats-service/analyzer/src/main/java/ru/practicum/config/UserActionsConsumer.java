@@ -10,7 +10,7 @@ import ru.practicum.service.UserActionService;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AnalyzerUserActionsConsumer {
+public class UserActionsConsumer {
 
     private final UserActionService userActionService;
 

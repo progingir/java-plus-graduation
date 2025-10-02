@@ -19,12 +19,11 @@ public class KafkaConfig {
 
     @Bean
     public ConsumerFactory<String, UserActionAvro> userActionsConsumerFactory() {
-        Map<String, Object> config = Map.of(
+        final Map<String, Object> config = Map.of(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, props.getBootstrapServers(),
                 ConsumerConfig.GROUP_ID_CONFIG, props.getUserActionsConsumer().getGroupId(),
-                ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, getClassFromString(props.getUserActionsConsumer().getKeyDeserializer()),
-                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, getClassFromString(props.getUserActionsConsumer().getValueDeserializer()),
-                "schema.registry.url", props.getSchemaRegistryUrl()
+                ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, props.getUserActionsConsumer().getKeyDeserializer(),
+                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, props.getUserActionsConsumer().getValueDeserializer()
         );
         return new DefaultKafkaConsumerFactory<>(config);
     }
@@ -43,8 +42,7 @@ public class KafkaConfig {
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, props.getBootstrapServers(),
                 ConsumerConfig.GROUP_ID_CONFIG, props.getEventsSimilarityConsumer().getGroupId(),
                 ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, getClassFromString(props.getEventsSimilarityConsumer().getKeyDeserializer()),
-                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, getClassFromString(props.getEventsSimilarityConsumer().getValueDeserializer()),
-                "schema.registry.url", props.getSchemaRegistryUrl()
+                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, getClassFromString(props.getEventsSimilarityConsumer().getValueDeserializer())
         );
         return new DefaultKafkaConsumerFactory<>(config);
     }
