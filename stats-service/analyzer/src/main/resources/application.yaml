@@ -13,6 +13,7 @@ spring:
         enabled: true
         service-id: config-server
 
+
 eureka:
   client:
     register-with-eureka: true
@@ -21,8 +22,6 @@ eureka:
       defaultZone: http://${eureka.instance.hostname:localhost}:${eureka.instance.port:8761}/eureka/
   instance:
     prefer-ip-address: true
-    metadata-map:
-      gRPC_port: ${grpc.server.port}
     hostname: localhost
     instance-id: "${spring.application.name}:${random.value}"
     lease-renewal-interval-in-seconds: 10
@@ -31,7 +30,7 @@ server:
 
 grpc:
   server:
-    port: 0
+    port: 1024
 
 kafka:
   bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
