@@ -15,7 +15,7 @@ spring:
   # --- НАСТРОЙКИ JPA/HIBERNATE ---
   jpa:
     hibernate:
-      ddl-auto: validate # Рекомендуется 'validate' или 'none' для запуска, чтобы не пересоздавать таблицы
+      ddl-auto: create # Рекомендуется 'validate' или 'none' для запуска, чтобы не пересоздавать таблицы
     show-sql: true # Полезно для отладки, чтобы видеть SQL-запросы в логах
     properties:
       hibernate:
