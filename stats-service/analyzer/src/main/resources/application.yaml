@@ -28,11 +28,15 @@ server:
   port: 0
 
 kafka:
+  bootstrap-servers: kafka:9092
+  schema-registry-url: http://schema-registry:8081
+  user-actions-consumer:
+    topic: user-actions
+    group-id: user-actions-group
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
   events-similarity-consumer:
     topic: events-similarity
-    keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
-    valueDeserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
-    user-actions-consumer:
-      topic: user-actions
-      keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
-      valueDeserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+    group-id: events-similarity-group
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
