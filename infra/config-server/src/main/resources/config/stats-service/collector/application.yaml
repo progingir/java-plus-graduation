@@ -7,7 +7,7 @@ spring:
 
 collector:
   kafka:
-    topic: stats.user-actions.v1
+    topic: stats-service.user-actions.v1
 
 grpc:
   server:
