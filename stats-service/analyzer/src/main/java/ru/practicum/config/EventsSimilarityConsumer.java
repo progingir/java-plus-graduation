@@ -15,7 +15,7 @@ public class EventsSimilarityConsumer {
     private final EventSimilarityService eventSimilarityService;
 
     @KafkaListener(
-            topics = "${kafka.events-similarity-consumer.topic}",
+            topics = "${spring.kafka.events-similarity-consumer.topic}",
             containerFactory = "eventSimilarityKafkaListenerFactory"
     )
     public void consumeEventSimilarity(EventSimilarityAvro msg) {
