@@ -225,6 +225,8 @@ services:
         condition: service_healthy
     networks:
       - ewm-net
+    kafka:
+      condition: service_started
     environment:
       - SPRING_CONFIG_IMPORT=configserver:http://config-server:9091
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
@@ -260,6 +262,8 @@ services:
         condition: service_healthy
       config-server:
         condition: service_healthy
+      kafka:
+        condition: service_started
     networks:
       - ewm-net
     environment:
