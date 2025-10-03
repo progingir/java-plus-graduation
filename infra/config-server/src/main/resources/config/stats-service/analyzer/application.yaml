@@ -19,7 +19,6 @@ spring:
 
 kafka:
   bootstrap-servers: kafka:29092
-  schema-registry-url: http://schema-registry:8081
   user-actions-consumer:
     group-id: analyzer-user-actions
     topic: stats-service.user-actions.v1
@@ -27,7 +26,7 @@ kafka:
     value-deserializer: ru.practicum.AvroDeserializer
   events-similarity-consumer:
     group-id: analyzer-events-sim
-    topic: stats.events-similarity.v1
+    topic: stats-service.events-similarity.v1
     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     value-deserializer: ru.practicum.AvroDeserializer
 
