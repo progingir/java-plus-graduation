@@ -17,18 +17,18 @@ spring:
     init:
       mode: always
 
-kafka:
-  bootstrap-servers: kafka:29092
-  user-actions-consumer:
-    group-id: analyzer-user-actions
-    topic: stats-service.user-actions.v1
-    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    value-deserializer: ru.practicum.AvroDeserializer
-  events-similarity-consumer:
-    group-id: analyzer-events-sim
-    topic: stats-service.events-similarity.v1
-    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    value-deserializer: ru.practicum.AvroDeserializer
+  kafka:
+    bootstrap-servers: kafka:29092
+    user-actions-consumer:
+      group-id: analyzer-user-actions
+      topic: stats-service.user-actions.v1
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: ru.practicum.AvroDeserializer
+    events-similarity-consumer:
+      group-id: analyzer-events-sim
+      topic: stats-service.events-similarity.v1
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: ru.practicum.AvroDeserializer
 
 grpc:
   client:

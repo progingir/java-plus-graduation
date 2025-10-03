@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@ConfigurationProperties(prefix = "kafka")
+@ConfigurationProperties("spring.kafka")
 public class KafkaProperties {
     private String bootstrapServers;
     private final ConsumerProps userActionsConsumer = new ConsumerProps();
