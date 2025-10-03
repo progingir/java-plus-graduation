@@ -15,8 +15,6 @@ services:
   config-server:
     build: infra/config-server
     container_name: config-server
-    ports:
-      - "9091:9091"
     depends_on:
       discovery-server:
         condition: service_healthy
@@ -183,21 +181,21 @@ services:
       KAFKA_LISTENERS: 'PLAINTEXT://kafka:29092,CONTROLLER://kafka:29093,PLAINTEXT_HOST://0.0.0.0:9092'
       CLUSTER_ID: 'K0EA9p0yEe6MkAAAAkKsEg'
 
-  # --- ДОБАВЛЕН СЕРВИС SCHEMA REGISTRY ---
-  schema-registry:
-    image: confluentinc/cp-schema-registry:7.4.3
-    hostname: schema-registry
-    container_name: schema-registry
-    depends_on:
-      - kafka
-    ports:
-      - "8081:8081"
-    networks:
-      - ewm-net
-    environment:
-      SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:29092
-      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+#  # --- ДОБАВЛЕН СЕРВИС SCHEMA REGISTRY ---
+#  schema-registry:
+#    image: confluentinc/cp-schema-registry:7.4.3
+#    hostname: schema-registry
+#    container_name: schema-registry
+#    depends_on:
+#      - kafka
+#    ports:
+#      - "8081:8081"
+#    networks:
+#      - ewm-net
+#    environment:
+#      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+#      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:29092
+#      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
 
   kafka-init-topics:
     image: confluentinc/confluent-local:7.4.3
@@ -205,7 +203,6 @@ services:
     depends_on:
       # Зависит от Kafka и Schema Registry (чтобы Schema Registry успел зарегистрироваться)
       - kafka
-      - schema-registry
     networks:
       - ewm-net
     command: "bash -c \
