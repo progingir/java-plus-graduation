@@ -46,7 +46,7 @@ spring:
   application:
     name: analyzer
   config:
-    import: optional:configserver:http://config-server:9091
+    import: optional:configserver:http://config-server:36877
   cloud:
     config:
       fail-fast: true
