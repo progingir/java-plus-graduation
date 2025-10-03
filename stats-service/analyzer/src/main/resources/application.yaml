@@ -46,7 +46,7 @@ spring:
   application:
     name: analyzer
   config:
-    import: optional:configserver:http://config-server:9091
+    import: "configserver:"
   cloud:
     config:
       fail-fast: true
@@ -58,7 +58,7 @@ spring:
         service-id: config-server
 
 kafka:
-  bootstrap-servers: kafka:9092
+  bootstrap-servers: kafka:29092
   user-actions-consumer:
     group-id: analyzer-user-actions
     topic: stats-service.user-actions.v1
