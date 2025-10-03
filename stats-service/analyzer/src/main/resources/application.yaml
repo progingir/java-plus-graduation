@@ -58,7 +58,7 @@ spring:
         service-id: config-server
 
 kafka:
-  bootstrap-servers: kafka:29092
+  bootstrap-servers: localhost:9092
   user-actions-consumer:
     group-id: analyzer-user-actions
     topic: stats-service.user-actions.v1
