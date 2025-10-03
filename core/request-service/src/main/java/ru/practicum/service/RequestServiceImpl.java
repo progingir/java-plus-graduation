@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.UserActionClient;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventRequestStatusUpdateRequest;
 import ru.practicum.dto.event.EventRequestStatusUpdateResult;
@@ -14,12 +15,17 @@ import ru.practicum.dto.request.enums.RequestStatus;
 import ru.practicum.exception.*;
 import ru.practicum.feign.EventClient;
 import ru.practicum.feign.UserClient;
+import ru.practicum.grpc.stats.action.ActionTypeProto;
 import ru.practicum.mapper.RequestMapper;
 import ru.practicum.model.Request;
 import ru.practicum.repository.RequestRepository;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -32,6 +38,7 @@ public class RequestServiceImpl implements RequestService {
     final RequestMapper requestMapper;
     final UserClient userClient;
     final EventClient eventClient;
+    final UserActionClient userActionClient;
     final SaveRequestTransactional saver;
 
     @Override
@@ -73,6 +80,9 @@ public class RequestServiceImpl implements RequestService {
                 .eventId(event.getId())
                 .status(status)
                 .build();
+
+        userActionClient.collectUserAction(userId, eventId, ActionTypeProto.ACTION_REGISTER, Instant.now());
+
         log.info("Post request body = {}", request);
         return saver.save(request);
     }
@@ -144,5 +154,10 @@ public class RequestServiceImpl implements RequestService {
                 .confirmedRequests(confirmedRequests)
                 .rejectedRequests(rejectedRequests)
                 .build();
+    }
+
+    @Override
+    public boolean isRequestExists(Long requesterId, Long eventId) {
+        return requestRepository.existsByRequesterIdAndEventId(requesterId, eventId);
     }
 }
