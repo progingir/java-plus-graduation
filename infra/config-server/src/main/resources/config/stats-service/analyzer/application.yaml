@@ -19,6 +19,7 @@ spring:
 
 kafka:
   bootstrap-servers: kafka:29092
+  schema-registry-url: http://schema-registry:8081
   user-actions-consumer:
     group-id: analyzer-user-actions
     topic: stats-service.user-actions.v1
