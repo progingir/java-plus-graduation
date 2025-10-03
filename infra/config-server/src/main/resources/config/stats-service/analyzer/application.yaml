@@ -1,0 +1,39 @@
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://analyzer-db:5432/ewm-analyzer
+    username: root
+    password: root
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    generate-ddl: false
+
+  sql:
+    init:
+      mode: always
+
+kafka:
+  bootstrap-servers: kafka:29092
+  user-actions-consumer:
+    group-id: analyzer-user-actions
+    topic: stats.user-actions.v1
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value-deserializer: ru.practicum.AvroDeserializer
+  events-similarity-consumer:
+    group-id: analyzer-events-sim
+    topic: stats.events-similarity.v1
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value-deserializer: ru.practicum.AvroDeserializer
+
+grpc:
+  client:
+    analyzer:
+      address: 'discovery:///analyzer'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext

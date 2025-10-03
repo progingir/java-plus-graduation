@@ -1,0 +1,11 @@
+kafka:
+  bootstrap-servers: kafka:29092
+  consumer:
+    topic: stats.user-actions.v1
+    group-id: aggregator-actions
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value-deserializer: ru.practicum.AvroDeserializer
+  producer:
+    topic: stats.events-similarity.v1
+    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    value-serializer: ru.practicum.AvroSerializer
