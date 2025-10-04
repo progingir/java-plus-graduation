@@ -1,6 +1,5 @@
 package ru.practicum.event.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +15,7 @@ import ru.practicum.event.service.EventService;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Slf4j
@@ -36,8 +36,7 @@ public class PublicEventController {
             @RequestParam(defaultValue = "false") Boolean onlyAvailable,
             @RequestParam(required = false) SortType sort,
             @RequestParam(defaultValue = "0") Integer from,
-            @RequestParam(defaultValue = "10") Integer size,
-            HttpServletRequest httpServletRequest) {
+            @RequestParam(defaultValue = "10") Integer size) {
         log.info("Get all public events");
         return eventService.getAllEventsPublic(GetAllEventsPublicParams.builder()
                 .text(text)
@@ -49,13 +48,24 @@ public class PublicEventController {
                 .sort(sort)
                 .from(from)
                 .size(size)
-                .httpServletRequest(httpServletRequest)
                 .build());
     }
 
     @GetMapping("/{eventId}")
-    public EventFullDto getEventByIdPublic(@PathVariable Long eventId, HttpServletRequest httpServletRequest) {
+    public EventFullDto getEventByIdPublic(@RequestHeader("X-EWM-USER-ID") Long userId, @PathVariable Long eventId) {
         log.info("Get public event with id: {}", eventId);
-        return eventService.getEventByIdPublic(eventId, httpServletRequest);
+        return eventService.getEventByIdPublic(userId, eventId);
+    }
+
+    @GetMapping("/recommendations")
+    public List<EventFullDto> getRecommendations(@RequestHeader("X-EWM-USER-ID") Long userId) {
+        log.info("Get recommendations for user with id: {}", userId);
+        return eventService.getRecommendations(userId);
+    }
+
+    @PutMapping("{eventId}/like")
+    public void likeEvent(@RequestHeader("X-EWM-USER-ID") Long userId, @PathVariable Long eventId) {
+        log.info("Like event with id: {} for user with id: {}", eventId, userId);
+        eventService.likeEvent(userId, eventId);
     }
 }

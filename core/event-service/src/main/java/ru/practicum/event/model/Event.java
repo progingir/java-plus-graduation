@@ -24,6 +24,7 @@ public class Event {
     @JoinColumn(name = "category_id")
     Category category;
 
+    @JoinColumn(name = "initiator_id")
     Long initiatorId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -53,5 +54,5 @@ public class Event {
     LocalDateTime publishedOn;
 
     @Transient
-    Long views = 0L;
+    Double rating = 0.0;
 }

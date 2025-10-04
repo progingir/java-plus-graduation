@@ -1,0 +1,208 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "\"Explore With Me\" внутреннее API (Feign)",
+    "description": "Documentation Internal microservices API.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    { "url": "http://user-service",   "description": "user-service"   },
+    { "url": "http://request-service","description": "request-service"},
+    { "url": "http://stats-server",   "description": "stats-server"   }
+  ],
+  "paths": {
+    "/admin/users": {
+      "post": {
+        "tags": [ "UserClient" ],
+        "summary": "Создать пользователя",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CreateUserRequest" } }
+          }
+        },
+        "responses": {
+          "201": { "description": "Created", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UserDto" } } } }
+        }
+      },
+      "get": {
+        "tags": [ "UserClient" ],
+        "summary": "Получить список пользователей",
+        "parameters": [
+          { "name": "ids",  "in": "query", "schema": { "type": "array", "items": { "type": "integer", "format": "int64" } } },
+          { "name": "from", "in": "query", "schema": { "type": "integer", "minimum": 0 }, "default": 0 },
+          { "name": "size", "in": "query", "schema": { "type": "integer", "minimum": 1 }, "default": 10 }
+        ],
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/UserDto" } } } } }
+        }
+      }
+    },
+    "/admin/users/{userId}": {
+      "get": {
+        "tags": [ "UserClient" ],
+        "summary": "Получить пользователя по id",
+        "parameters": [
+          { "name": "userId", "in": "path", "required": true, "schema": { "type": "integer", "format": "int64" } }
+        ],
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UserDto" } } } }
+        }
+      },
+      "delete": {
+        "tags": [ "UserClient" ],
+        "summary": "Удалить пользователя",
+        "parameters": [
+          { "name": "userId", "in": "path", "required": true, "schema": { "type": "integer", "format": "int64" } }
+        ],
+        "responses": { "204": { "description": "No Content" } }
+      }
+    },
+
+    "/requests/feign/confirmed": {
+      "get": {
+        "tags": [ "RequestClient" ],
+        "summary": "Подтверждённые заявки для списка событий",
+        "parameters": [
+          { "name": "eventIds", "in": "query", "required": true,
+            "schema": { "type": "array", "items": { "type": "integer", "format": "int64" } } }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": { "$ref": "#/components/schemas/RequestDto" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/events/feign/{eventId}": {
+      "get": {
+        "tags": [ "EventClient" ],
+        "summary": "Получить событие по id",
+        "parameters": [
+          { "name": "eventId", "in": "path", "required": true, "schema": { "type": "integer", "format": "int64" } }
+        ],
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EventFullDto" } } } }
+        }
+      }
+    },
+    "/events/feign/{userId}/{eventId}": {
+      "get": {
+        "tags": [ "EventClient" ],
+        "summary": "Получить событие пользователя",
+        "parameters": [
+          { "name": "userId",  "in": "path", "required": true, "schema": { "type": "integer", "format": "int64" } },
+          { "name": "eventId", "in": "path", "required": true, "schema": { "type": "integer", "format": "int64" } }
+        ],
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EventFullDto" } } } }
+        }
+      }
+    },
+
+    "/hit": {
+      "post": {
+        "tags": [ "StatsClient" ],
+        "summary": "Записать просмотр",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/HitRequest" } } }
+        },
+        "responses": { "201": { "description": "Created" } }
+      }
+    },
+    "/stats": {
+      "get": {
+        "tags": [ "StatsClient" ],
+        "summary": "Получить статистику посещений",
+        "parameters": [
+          { "name": "start", "in": "query", "required": true,
+            "schema": { "type": "string", "format": "date-time", "example": "2025-01-01 00:00:00" } },
+          { "name": "end", "in": "query", "required": true,
+            "schema": { "type": "string", "format": "date-time", "example": "2025-01-31 23:59:59" } },
+          { "name": "uris", "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } } },
+          { "name": "unique", "in": "query", "schema": { "type": "boolean" }, "default": false }
+        ],
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/GetResponse" } } } } }
+        }
+      }
+    }
+  },
+
+  "components": {
+    "schemas": {
+      "CreateUserRequest": {
+        "type": "object",
+        "required": [ "email", "name" ],
+        "properties": {
+          "email": { "type": "string", "format": "email" },
+          "name":  { "type": "string", "minLength": 1 }
+        }
+      },
+      "UserDto": {
+        "type": "object",
+        "properties": {
+          "id":    { "type": "integer", "format": "int64" },
+          "name":  { "type": "string" },
+          "email": { "type": "string", "format": "email" }
+        }
+      },
+      "RequestDto": {
+        "type": "object",
+        "properties": {
+          "id":        { "type": "integer", "format": "int64" },
+          "created":   { "type": "string", "format": "date-time" },
+          "status":    { "type": "string" },
+          "eventId":   { "type": "integer", "format": "int64" },
+          "requester": { "type": "integer", "format": "int64" }
+        }
+      },
+      "EventFullDto": {
+        "type": "object",
+        "properties": {
+          "id":          { "type": "integer", "format": "int64" },
+          "title":       { "type": "string" },
+          "annotation":  { "type": "string" },
+          "categoryId":  { "type": "integer", "format": "int64" },
+          "initiatorId": { "type": "integer", "format": "int64" },
+          "confirmedRequests": { "type": "integer" },
+          "eventDate":  { "type": "string", "format": "date-time" },
+          "state":      { "type": "string" }
+        }
+      },
+      "HitRequest": {
+        "type": "object",
+        "required": [ "app", "uri", "ip", "timestamp" ],
+        "properties": {
+          "app":       { "type": "string" },
+          "uri":       { "type": "string" },
+          "ip":        { "type": "string", "format": "ipv4" },
+          "timestamp": { "type": "string", "format": "date-time" }
+        }
+      },
+      "GetResponse": {
+        "type": "object",
+        "properties": {
+          "app":    { "type": "string" },
+          "uri":    { "type": "string" },
+          "hits":   { "type": "integer" },
+          "unique": { "type": "integer" }
+        }
+      }
+    }
+  }
+}

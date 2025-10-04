@@ -16,7 +16,7 @@ import lombok.experimental.FieldDefaults;
 public class Category {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     @Column(name = "name", nullable = false, unique = true, length = 50)

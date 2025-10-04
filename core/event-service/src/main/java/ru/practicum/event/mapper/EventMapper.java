@@ -11,7 +11,7 @@ public interface EventMapper {
     @Mapping(target = "initiatorId", ignore = true)
     @Mapping(target = "confirmedRequests", ignore = true)
     @Mapping(target = "publishedOn", ignore = true)
-    @Mapping(target = "views", ignore = true)
+    @Mapping(target = "rating", ignore = true)
     @Mapping(target = "category.id", source = "category")
     @Mapping(target = "createdOn", expression = "java(java.time.LocalDateTime.now())")
     @Mapping(target = "state", expression = "java(ru.practicum.dto.event.enums.EventState.PENDING)")
@@ -31,7 +31,7 @@ public interface EventMapper {
     @Mapping(target = "createdOn", ignore = true)
     @Mapping(target = "confirmedRequests", ignore = true)
     @Mapping(target = "publishedOn", ignore = true)
-    @Mapping(target = "views", ignore = true)
+    @Mapping(target = "rating", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserRequest(UpdateEventUserRequest userRequest, @MappingTarget Event event);
 
@@ -42,7 +42,7 @@ public interface EventMapper {
     @Mapping(target = "createdOn", ignore = true)
     @Mapping(target = "confirmedRequests", ignore = true)
     @Mapping(target = "publishedOn", ignore = true)
-    @Mapping(target = "views", ignore = true)
+    @Mapping(target = "rating", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void patchUserRequest(AdminPatchEventDto adminPatchEventDto, @MappingTarget Event event);
 }
